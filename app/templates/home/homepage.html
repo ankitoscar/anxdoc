@@ -6,6 +6,14 @@
         </title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+    <script>
+$(document).ready(function(){
+  $("#hide").click(function(){
+    $("p").hide();
+  });
+});
+</script>
     
  <style>   
     body {
@@ -44,20 +52,31 @@ background-color: #d84a38;
 }
 
 </style>
-    
-    
-    
-    
-    </head>
+ </head>
     
     <body>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8  offset-lg-2">
                     <strong> <h2 class="mt-5">Live  Streaming</h2></strong>
-                    <img src="{% url 'video_feed' %}" width="100%">
-                    <div>
-      <button id="stream" disabled>Start Streaming</button>
+                    
+                    
+<button onclick="myFunction()">Start Streaming</button>
+<button id="hide">Stop Streaming</button>
+<div id="start" style="display:none">
+<p>
+<img src="{% url 'video_feed' %}" width="100%">
+</p>
+</div>
+   <script>
+function myFunction() {
+  var x = document.getElementById("start");
+ x.style.display = "block";
+  }
+
+</script>
+
+       
       </div>
                 </div>
             </div>
