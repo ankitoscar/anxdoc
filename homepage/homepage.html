@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <title>
+            Webcam Streaming
+        </title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans+SC&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+    <script>
+$(document).ready(function(){
+  $("#").click(function(){
+    $("p").hide();
+  });
+});
+</script>
+
+    
+ <style>   
+ 
+ 
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  background-color: #021027;
+  color: #fff;
+  
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+ 
+  position: relative;
+}
+
+.background {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -o-object-fit: cover;
+     object-fit: cover;
+  width: 100%;
+  height: 100%;
+  -webkit-mask-image: radial-gradient(white 0%, white 30%, transparent 90%, transparent);
+          mask-image: radial-gradient(white 0%, white 30%, transparent 90%, transparent);
+}
+
+
+
+#neon_btn {
+  color: var(--color-neon);
+  background-color: #152238;
+  font-size: 1.8rem;
+  text-decoration: none;
+  font-family: 'Alegreya Sans SC', sans-serif;
+  display: inline-block;
+  cursor: pointer;
+  border: var(--color-neon) 4px solid;
+  letter-spacing: 1px;
+  padding: 0.25em 1em;
+  border-radius: 0.25em;
+  text-shadow: 0 0 0.1em hsl(0, 0%, 100%), 0 0 0.5em currentColor;
+  box-shadow: inset 0 0 0.5em 0 var(--color-neon), 0 0 0.5em 0 var(--color-neon);
+  position: relative;
+  text-align: center;
+  transition: background 100ms linear;
+}
+#neon_btn::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 140%;
+  left: 0;
+  background: var(--color-neon);
+  transform: perspective(1em) rotateX(40deg) scale(1, 0.35);
+  filter: blur(1em);
+  opacity: 0.6;
+}
+#neon_btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: 0 0 2em 0.5em var(--color-neon);
+  transition: opacity 100ms linear;
+  opacity: 0;
+  -webkit-transition: opacity 100ms linear;
+  -moz-transition: opacity 100ms linear;
+  -ms-transition: opacity 100ms linear;
+  -o-transition: opacity 100ms linear;
+}
+#neon_btn:hover {
+  background: var(--color-neon);
+  color: var(--color-bg);
+  text-shadow: 0;
+}
+#neon_btn:hover::before {
+  opacity: 1;
+}
+#neon_btn:hover::after {
+  opacity: 1;
+}
+
+
+</style>
+
+<script>
+
+
+
+</script>
+ </head>
+    
+    <body>
+
+     
+<img class="background" src="1.png">
+        <div class="container">
+        
+       
+            <div class="row">
+                <div class="col-lg-8  offset-lg-2">
+                    <strong> <h2 class="mt-5">Live  Streaming</h2></strong>
+                    
+                    
+
+
+<button id="neon_btn" onclick="display()">Start Streaming</button>
+<button id="neon_btn" onclick="hide()">Stop Streaming</button>
+
+
+
+<script>
+function display() {
+ var div= document.getElementById('start');
+div.style.display = 'block';
+  }
+
+</script>
+
+<script>
+function hide() {
+var div = document.getElementById('start');
+div.style.display = 'none'; 
+}
+</script>
+
+
+                    
+ 
+
+ 
+<div id="start" style="display:none">
+ 
+<p>
+   
+
+
+<img src="{% url 'video_feed' %}" width="100%">
+</div>
+</p>
+</div>
+</div>
+       
+      </div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    </body>
+</html>
