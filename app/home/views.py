@@ -22,7 +22,16 @@ def home(request):
 
 #to capture video class
 class VideoCamera(object):
+    """
+    Class which implements video detector to predict state of the user, i.e. alert, non-vigilant or tired
+    """
     def __init__(self):
+        """
+        Initialisation of video capture class. 
+        self.video = Captures video from webcam
+        self.frame = Frame of the video at that instant 
+        self.input_size = Size of input to be fed to the model 
+        """
         self.video = cv2.VideoCapture(0)
         (self.grabbed, self.frame) = self.video.read()
         self.input_size = (1, 175, 175, 3)
@@ -33,16 +42,22 @@ class VideoCamera(object):
         self.video.release()
 
     def get_frame(self):
+        """
+        Analysing every frame in the video 
+        image = frame from the video 
+        detector = MTCNN instance 
+        detections = coordinates of landmarks on the face
+        """
         try:
             image = self.frame
             detector = MTCNN()
             detections = detector.detect_faces(image)
 
             for detection in detections:
-                x, y, width, height = detection['box']
+                x, y, width, height = detection['box'] # centre and width and height of face 
                 cv2.rectangle(image, (x,y), (x+width,y+height), (0,155,255), 2)
                 global result 
-                result = self.predict(image, (x, y, width, height))
+                result = self.predict(image, (x, y, width, height)) # result of prediction
             
             _, jpeg = cv2.imencode('.jpg', image)
             return jpeg.tobytes()
@@ -54,12 +69,17 @@ class VideoCamera(object):
             (self.grabbed, self.frame) = self.video.read()
     
     def predict(self, image, dimensions):
+        """
+        Function to predict state of user
+
+        x1, y1, x2, y2 = coordinates of diagonals of face box
+        """
         x1, y1 = abs(dimensions[0]), abs(dimensions[1])
         x2, y2 = x1 + dimensions[2], y1 + dimensions[3]
 
         face_array = image[y1:y2, x1:x2]
         face_image = Image.fromarray(face_array)
-        face_image = face_image.resize((175, 175))
+        face_image = face_image.resize((175, 175)) # resizing image to required resolution
         face = np.asarray(face_image)
 
         return np.argmax(model.predict(face.reshape(self.input_size)))
