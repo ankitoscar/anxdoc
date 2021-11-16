@@ -1,12 +1,20 @@
-from django.http import HttpResponse
 from django.shortcuts import render
-from .models import *
-from django.core.mail import EmailMessage
 from django.views.decorators import gzip
+from django.conf import settings
 from django.http import StreamingHttpResponse
 import cv2
 import threading
 from mtcnn import MTCNN
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras 
+import cv2 
+from PIL import Image
+
+
+global result, model
+model = tf.keras.models.load_model(settings.MODEL_PATH)
+print('Model loaded !!!')
 
 @gzip.gzip_page
 def home(request):
@@ -17,6 +25,8 @@ class VideoCamera(object):
     def __init__(self):
         self.video = cv2.VideoCapture(0)
         (self.grabbed, self.frame) = self.video.read()
+        self.input_size = (1, 175, 175, 3)
+        
         threading.Thread(target=self.update, args=()).start()
 
     def __del__(self):
@@ -30,13 +40,9 @@ class VideoCamera(object):
 
             for detection in detections:
                 x, y, width, height = detection['box']
-                keypoints = detection['keypoints']
                 cv2.rectangle(image, (x,y), (x+width,y+height), (0,155,255), 2)
-                cv2.circle(image, (keypoints['left_eye']), 2, (0,155,255), 2)
-                cv2.circle(image, (keypoints['right_eye']), 2, (0,155,255), 2)
-                cv2.circle(image, (keypoints['nose']), 2, (0,155,255), 2)
-                cv2.circle(image, (keypoints['mouth_left']), 2, (0,155,255), 2)
-                cv2.circle(image, (keypoints['mouth_right']), 2, (0,155,255), 2)
+                global result 
+                result = self.predict(image, (x, y, width, height))
             
             _, jpeg = cv2.imencode('.jpg', image)
             return jpeg.tobytes()
@@ -46,6 +52,19 @@ class VideoCamera(object):
     def update(self):
         while True:
             (self.grabbed, self.frame) = self.video.read()
+    
+    def predict(self, image, dimensions):
+        x1, y1 = abs(dimensions[0]), abs(dimensions[1])
+        x2, y2 = x1 + dimensions[2], y1 + dimensions[3]
+
+        face_array = image[y1:y2, x1:x2]
+        face_image = Image.fromarray(face_array)
+        face_image = face_image.resize((175, 175))
+        face = np.asarray(face_image)
+
+        return np.argmax(model.predict(face.reshape(self.input_size)))
+
+
 
 def gen(camera):
     while True:
