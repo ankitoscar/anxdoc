@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'home.config.HomeConfig'
+    'home.apps.HomeConfig'
 ]
 
 MIDDLEWARE = [
@@ -124,6 +124,8 @@ STATICFILES_DIRS = [
     BASE_DIR/ 'static',
     '/var/www/static/',
 ]
+
+MODEL_PATH = BASE_DIR.joinpath('model/model.h5')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
