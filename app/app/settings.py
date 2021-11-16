@@ -125,6 +125,8 @@ STATICFILES_DIRS = [
     '/var/www/static/',
 ]
 
+MODEL_PATH = BASE_DIR.joinpath('model/model.h5')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
