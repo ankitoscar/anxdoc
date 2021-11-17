@@ -12,13 +12,19 @@ import cv2
 from PIL import Image
 
 
-global result, model
+global result, model, output
+result = 0
+output = {
+    0: 'Alert',
+    1: 'Non Vigilant',
+    2: 'Tired'
+}
 model = tf.keras.models.load_model(settings.MODEL_PATH)
 print('Model loaded !!!')
 
-@gzip.gzip_page
-def home(request):
-    return render(request, 'home/homepage.html')
+# @gzip.gzip_page
+# def home(request):
+#     return render(request, 'home/homepage.html', {'result' : output[result]})
 
 #to capture video class
 class VideoCamera(object):
@@ -50,6 +56,7 @@ class VideoCamera(object):
         """
         try:
             image = self.frame
+            print(image.shape)
             detector = MTCNN()
             detections = detector.detect_faces(image)
 
@@ -58,6 +65,7 @@ class VideoCamera(object):
                 cv2.rectangle(image, (x,y), (x+width,y+height), (0,155,255), 2)
                 global result 
                 result = self.predict(image, (x, y, width, height)) # result of prediction
+                print(result) # 0: alert, 1 : non-vigilant, 2 : tired
             
             _, jpeg = cv2.imencode('.jpg', image)
             return jpeg.tobytes()
@@ -81,6 +89,7 @@ class VideoCamera(object):
         face_image = Image.fromarray(face_array)
         face_image = face_image.resize((175, 175)) # resizing image to required resolution
         face = np.asarray(face_image)
+        face = face / 255
 
         return np.argmax(model.predict(face.reshape(self.input_size)))
 
@@ -98,3 +107,7 @@ def video_feed(request):
         return StreamingHttpResponse(gen(cam), content_type="multipart/x-mixed-replace;boundary=frame")
     except:
         pass
+
+@gzip.gzip_page
+def home(request):
+    return render(request, 'home/homepage.html', {'result' : output[result]})
