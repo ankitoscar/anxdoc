@@ -49,9 +49,6 @@ The libraries and frameworks used in this project till now are:
  - Implement integrations with various apps like Microsoft Teams, Zoom, Webex, etc.
 
 ![abnb.png](https://www.voicesofyouth.org/sites/voy/files/images/2021-08/1b7f385e-fe6b-4aab-88b3-1966b43dadc3.jpeg)
-### Versions:
-
-- 1.0 - Only some basic files, will add more files and attach UI images soon in future.
 
 
 License
